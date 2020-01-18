@@ -1,11 +1,22 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
+from products_views import products_app
+from cart_views import cart_app
 
 app = Flask(__name__)
+app.register_blueprint(products_app, url_prefix='/products')
+app.register_blueprint(cart_app, url_prefix='/cart')
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST', 'PUT'])
 def index():
-    return 'Hello world!'
+    if request.method == 'GET':
+        return render_template('index.html')
+    return f'Hello request {request.method}'
+
+
+@app.route('/', methods=['PATCH'])
+def index_patch():
+    return 'Hello PATCH!'
 
 
 if __name__ == '__main__':
